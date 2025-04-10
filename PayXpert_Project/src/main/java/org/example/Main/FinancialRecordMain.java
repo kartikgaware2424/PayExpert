@@ -2,6 +2,7 @@ package org.example.Main;
 
 import org.example.Dao.IFinancialRecordService;
 import org.example.Dao.IFinancialRecordServiceImpl;
+import org.example.Exceptions.DatabaseConnectionException;
 import org.example.Models.FinancialRecord;
 
 import java.sql.Date;
@@ -45,6 +46,8 @@ public class FinancialRecordMain {
             System.out.println(  dao.GetFinancialRecordById(Record_Id));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
     }
 public static void GetFinancialRecordsForEmployee()
@@ -53,9 +56,7 @@ public static void GetFinancialRecordsForEmployee()
     int Employee_ID=sc.nextInt();
     try {
         System.out.println(dao.GetFinancialRecordsForEmployee(Employee_ID));
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
+    } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
         throw new RuntimeException(e);
     }
 
@@ -71,9 +72,7 @@ public  static  void GetFinancialRecordsForDate()
         {
             System.out.println(record);
         }
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
+    } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
         throw new RuntimeException(e);
     }
 

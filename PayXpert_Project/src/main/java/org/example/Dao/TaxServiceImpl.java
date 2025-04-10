@@ -1,5 +1,7 @@
 package org.example.Dao;
 
+import org.example.Exceptions.DatabaseConnectionException;
+import org.example.Exceptions.TaxCalculationException;
 import org.example.Models.Tax;
 import org.example.Util.ConnectionHelper;
 
@@ -15,7 +17,7 @@ public class TaxServiceImpl implements ITaxService{
     Connection connection;
     PreparedStatement pst;
     @Override
-    public String calculateTax(int employeeId, int taxYear) throws SQLException, ClassNotFoundException {
+    public String calculateTax(int employeeId, int taxYear) throws SQLException, ClassNotFoundException, TaxCalculationException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
 
 
@@ -30,7 +32,13 @@ public class TaxServiceImpl implements ITaxService{
             taxableIncome = rs.getDouble("TotalIncome");
 
         }
-        double taxAmount = taxableIncome * 0.10;
+        double taxAmount ;
+
+        if (taxableIncome <= 5000) {
+            taxAmount = taxableIncome * 0.05;
+        } else {
+            taxAmount = taxableIncome * 0.10;
+        }
         taxableIncome= taxableIncome-taxAmount;
         String cmd2 = "SELECT TaxID FROM Tax WHERE EmployeeID = ? AND TaxYear = ?";
         pst = connection.prepareStatement(cmd2);
@@ -48,13 +56,17 @@ public class TaxServiceImpl implements ITaxService{
             pst.setInt(4, taxYear);
 
             int rowsUpdated = pst.executeUpdate();
-            return rowsUpdated > 0 ? "Tax updated for Employee ID: " + employeeId : "Failed to update tax.";
+            if (rowsUpdated > 0) {
+                return "Tax updated for Employee ID: " + employeeId;
+            } else {
+                throw new TaxCalculationException("Failed to update tax for Employee ID " + employeeId);
+            }
         }
-        return "Tax Calculated SucessFully";
+        return "Tax Calculated SuccessFully";
     }
 
     @Override
-    public Tax getTaxById(int taxId) throws SQLException, ClassNotFoundException {
+    public Tax getTaxById(int taxId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String query = "SELECT * FROM Tax WHERE TaxID = ?";
         pst = connection.prepareStatement(query);
@@ -69,7 +81,7 @@ public class TaxServiceImpl implements ITaxService{
     }
 
     @Override
-    public List<Tax> getTaxesForEmployee(int employeeId) throws SQLException, ClassNotFoundException {
+    public List<Tax> getTaxesForEmployee(int employeeId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         List<Tax> taxes = new ArrayList<>();
 
@@ -86,7 +98,7 @@ public class TaxServiceImpl implements ITaxService{
     }
 
     @Override
-    public List<Tax> getTaxesForYear(int taxYear) throws SQLException, ClassNotFoundException {
+    public List<Tax> getTaxesForYear(int taxYear) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         List<Tax> taxes = new ArrayList<>();
 

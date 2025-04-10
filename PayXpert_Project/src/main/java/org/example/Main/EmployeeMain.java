@@ -2,6 +2,7 @@ package org.example.Main;
 
 import org.example.Dao.EmployeeServiceImpl;
 import org.example.Dao.IEmployeeService;
+import org.example.Exceptions.DatabaseConnectionException;
 import org.example.Exceptions.EmployeeNotFoundException;
 import org.example.Models.Employee;
 
@@ -29,7 +30,7 @@ public class EmployeeMain {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
-        } catch (EmployeeNotFoundException e) {
+        } catch (EmployeeNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -40,12 +41,12 @@ public class EmployeeMain {
             {
                 System.out.println(employee);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void addEmployee() throws SQLException, ClassNotFoundException {
+    public static void addEmployee() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         Employee employee=new Employee();
         System.out.println("\nAdd New Employee");
         System.out.println("----------------");
@@ -82,7 +83,7 @@ public class EmployeeMain {
         System.out.println("Employee added successfully!");
 
     }
-    public static void updateEmployee() throws SQLException, ClassNotFoundException {
+    public static void updateEmployee() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         Employee employee=new Employee();
         System.out.println("\nUpdate Employee");
         System.out.println("----------------");
@@ -129,7 +130,7 @@ public class EmployeeMain {
         int employeeiD=sc.nextInt();
         try {
             System.out.println(Dao.removeEmployee(employeeiD));
-        } catch (SQLException | EmployeeNotFoundException | ClassNotFoundException e) {
+        } catch (SQLException | EmployeeNotFoundException | ClassNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -143,7 +144,7 @@ public class EmployeeMain {
     }
 
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
 
         boolean back = false;
 
@@ -158,7 +159,7 @@ public class EmployeeMain {
             System.out.print("Enter your choice: ");
 
             int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine();
 
             switch (choice) {
                 case 1:

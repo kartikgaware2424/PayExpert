@@ -1,5 +1,7 @@
 package org.example.Dao;
 
+import org.example.Exceptions.DatabaseConnectionException;
+import org.example.Exceptions.FinancialRecordException;
 import org.example.Models.FinancialRecord;
 import org.example.Util.ConnectionHelper;
 
@@ -16,7 +18,7 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
     PreparedStatement pst;
 
     @Override
-    public String AddFinancialRecord(int employeeId,  String description, double amount, String recordType) throws SQLException, ClassNotFoundException {
+    public String AddFinancialRecord(int employeeId,  String description, double amount, String recordType) throws SQLException, ClassNotFoundException, FinancialRecordException, DatabaseConnectionException {
 
         connection = ConnectionHelper.getConnection();
         String insert = "INSERT INTO FinancialRecord (EmployeeID, RecordDate, Description, Amount, RecordType) VALUES (?, ?, ?, ?, ?)";
@@ -30,11 +32,14 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
         int rows = pst.executeUpdate();
 
 
-        return rows > 0 ? "Record added successfully!" : "Failed to add record.";
+        if (rows <= 0) {
+            throw new FinancialRecordException("Failed to add financial record for Employee ID: " + employeeId);
+        }
+        return "Record added successfully!";
     }
 
     @Override
-    public String GetFinancialRecordById(int recordId) throws SQLException, ClassNotFoundException {
+    public String GetFinancialRecordById(int recordId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
 
         connection = ConnectionHelper.getConnection();
 
@@ -82,7 +87,7 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
     }
 
     @Override
-    public FinancialRecord GetFinancialRecordsForEmployee(int employeeId) throws SQLException, ClassNotFoundException {
+    public FinancialRecord GetFinancialRecordsForEmployee(int employeeId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String cmd="Select * from FinancialRecord where EmployeeID=?";
         pst=connection.prepareStatement(cmd);
@@ -103,7 +108,7 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
     }
 
     @Override
-    public List<FinancialRecord> GetFinancialRecordsForDate(Date recordDate) throws SQLException, ClassNotFoundException {
+    public List<FinancialRecord> GetFinancialRecordsForDate(Date recordDate) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String cmd="Select * from FinancialRecord where RecordDate=?";
         pst=connection.prepareStatement(cmd);

@@ -2,6 +2,8 @@ package org.example.Main;
 
 import org.example.Dao.ITaxService;
 import org.example.Dao.TaxServiceImpl;
+import org.example.Exceptions.DatabaseConnectionException;
+import org.example.Exceptions.TaxCalculationException;
 import org.example.Models.Tax;
 
 import java.sql.Date;
@@ -25,6 +27,10 @@ public class TaxMain {
             System.out.println(result);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error calculating tax: " + e.getMessage());
+        } catch (TaxCalculationException e) {
+            throw new RuntimeException(e);
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void getTaxById() {
@@ -34,7 +40,7 @@ public class TaxMain {
         try {
             Tax tax = taxService.getTaxById(taxId);
             System.out.println(tax != null ? tax : "No tax record found.");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             System.out.println("Error fetching tax: " + e.getMessage());
         }
     }
@@ -49,10 +55,10 @@ public class TaxMain {
             {
                 System.out.println(e);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
-        
+
 
     }
     public static void GetTaxesForYear()
@@ -68,7 +74,7 @@ public class TaxMain {
             {
                 System.out.println(t);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
 

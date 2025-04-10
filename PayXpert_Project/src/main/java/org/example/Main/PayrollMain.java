@@ -2,6 +2,8 @@ package org.example.Main;
 
 import org.example.Dao.IPayrollService;
 import org.example.Dao.PayrollServiceImpl;
+import org.example.Exceptions.DatabaseConnectionException;
+import org.example.Exceptions.PayrollGenerationException;
 import org.example.Models.Payroll;
 
 import java.sql.SQLException;
@@ -33,6 +35,10 @@ public class PayrollMain {
             System.out.println(result);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (PayrollGenerationException e) {
+            throw new RuntimeException(e);
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
 
 
@@ -48,7 +54,7 @@ public class PayrollMain {
             } else {
                 System.out.println("No payroll found with ID: " + payrollId);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             System.out.println("Error fetching payroll: " + e.getMessage());
         }
     }
@@ -65,7 +71,7 @@ public class PayrollMain {
             } else {
                 System.out.println("No payrolls found for Employee ID: " + empId);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             System.out.println("Error fetching payrolls: " + e.getMessage());
         }
     }
@@ -88,7 +94,7 @@ public class PayrollMain {
             } else {
                 System.out.println("No payrolls found for the given period.");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             System.out.println("Error fetching payrolls: " + e.getMessage());
         }
     }
@@ -107,7 +113,7 @@ public class PayrollMain {
             System.out.print("Enter your choice: ");
 
             int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine();
 
             switch (choice) {
                 case 1:

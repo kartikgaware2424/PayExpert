@@ -1,5 +1,6 @@
 package org.example.Dao;
 
+import org.example.Exceptions.DatabaseConnectionException;
 import org.example.Exceptions.EmployeeNotFoundException;
 import org.example.Models.Employee;
 import org.example.Util.ConnectionHelper;
@@ -16,7 +17,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
     PreparedStatement pst;
     PreparedStatement pst1;
     @Override
-    public Employee getEmployeeById(int employeeId) throws SQLException, ClassNotFoundException, EmployeeNotFoundException {
+    public Employee getEmployeeById(int employeeId) throws SQLException, ClassNotFoundException, EmployeeNotFoundException, DatabaseConnectionException {
         connection= ConnectionHelper.getConnection();
         String cmd="select * from employee where EmployeeID=?";
         pst=connection.prepareStatement(cmd);
@@ -47,7 +48,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
 
 
     @Override
-    public List<Employee> getAllEmployees() throws SQLException, ClassNotFoundException {
+    public List<Employee> getAllEmployees() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection=ConnectionHelper.getConnection();
         String cmd="Select * from Employee";
         pst=connection.prepareStatement(cmd);
@@ -75,7 +76,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
     }
 
     @Override
-    public String addEmployee(Employee employeeData) throws SQLException, ClassNotFoundException {
+    public String addEmployee(Employee employeeData) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection =ConnectionHelper.getConnection();
         String cmd = "INSERT INTO Employee (FirstName, LastName, DateOfBirth, Gender, Email, " +
                 "PhoneNumber, Address, Position, JoiningDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -95,7 +96,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
     }
 
     @Override
-    public String updateEmployee(Employee employeeData) throws SQLException, ClassNotFoundException {
+    public String updateEmployee(Employee employeeData) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection =ConnectionHelper.getConnection();
         String cmd="Update Employee set FirstName=?, LastName=?, DateOfBirth=?, Gender=?, Email=?," +
                 " PhoneNumber=?, Address=?, Position=?, JoiningDate=? where EmployeeID=?";
@@ -118,7 +119,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
     }
 
     @Override
-    public String removeEmployee(int employeeId) throws SQLException, ClassNotFoundException, EmployeeNotFoundException {
+    public String removeEmployee(int employeeId) throws SQLException, ClassNotFoundException, EmployeeNotFoundException, DatabaseConnectionException {
         connection =ConnectionHelper.getConnection();
         String cmd1="select * from employee where employeeId=?";
         pst1=connection.prepareStatement(cmd1);
@@ -139,4 +140,5 @@ public class EmployeeServiceImpl implements IEmployeeService{
         }
         return "Record deleted Successfully....";
     }
+
 }

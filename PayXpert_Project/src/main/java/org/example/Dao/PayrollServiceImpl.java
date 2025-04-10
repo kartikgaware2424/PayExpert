@@ -1,5 +1,8 @@
 package org.example.Dao;
 
+import org.example.Exceptions.DatabaseConnectionException;
+import org.example.Exceptions.InvalidInputException;
+import org.example.Exceptions.PayrollGenerationException;
 import org.example.Models.Payroll;
 import org.example.Util.ConnectionHelper;
 
@@ -15,7 +18,7 @@ public class PayrollServiceImpl implements IPayrollService {
     Connection connection;
     PreparedStatement pst;
     @Override
-    public String generatePayroll(int employeeId, Date startDate, Date endDate) throws SQLException, ClassNotFoundException {
+    public String generatePayroll(int employeeId, Date startDate, Date endDate) throws SQLException, ClassNotFoundException, PayrollGenerationException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
 
         // Fetch Payroll Record for the Given Employee
@@ -45,15 +48,16 @@ public class PayrollServiceImpl implements IPayrollService {
             if (rowsUpdated > 0) {
                 return "Payroll updated! Employee ID: " + employeeId + " | Net Salary: " + netSalary;
             } else {
-                return "Failed to update payroll for Employee ID " + employeeId;
+                throw new PayrollGenerationException("Failed to update payroll for Employee ID " + employeeId);
             }
         } else {
-            return "Payroll entry not found for Employee ID " + employeeId + " in the given period.";
+            throw new PayrollGenerationException("Payroll entry not found for Employee ID " + employeeId + " in the given period.");
+
         }
     }
 
     @Override
-    public Payroll getPayrollById(int payrollId) throws SQLException, ClassNotFoundException {
+    public Payroll getPayrollById(int payrollId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String query = "SELECT * FROM Payroll WHERE PayrollID = ?";
         pst = connection.prepareStatement(query);
@@ -76,7 +80,7 @@ public class PayrollServiceImpl implements IPayrollService {
     }
 
     @Override
-    public List<Payroll> getPayrollsForEmployee(int employeeId) throws SQLException, ClassNotFoundException {
+    public List<Payroll> getPayrollsForEmployee(int employeeId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String query = "SELECT * FROM Payroll WHERE EmployeeID = ?";
         pst = connection.prepareStatement(query);
@@ -99,7 +103,7 @@ public class PayrollServiceImpl implements IPayrollService {
         }
         return payrollList;
     }
-    public List<Payroll> getPayrollsForPeriod(Date startDate, Date endDate) throws SQLException, ClassNotFoundException {
+    public List<Payroll> getPayrollsForPeriod(Date startDate, Date endDate) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
         String query = "SELECT * FROM Payroll WHERE PayPeriodStartDate >= ? AND PayPeriodEndDate <= ?";
         pst = connection.prepareStatement(query);
