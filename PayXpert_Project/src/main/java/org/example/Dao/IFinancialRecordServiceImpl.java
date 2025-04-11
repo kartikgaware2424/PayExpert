@@ -42,11 +42,6 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
     public String GetFinancialRecordById(int recordId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
 
         connection = ConnectionHelper.getConnection();
-
-
-
-
-
         String cmd="Select * from FinancialRecord where RecordID=?";
         pst=connection.prepareStatement(cmd);
         pst.setInt(1,recordId);
@@ -126,8 +121,6 @@ public class IFinancialRecordServiceImpl implements IFinancialRecordService{
             financialRecord.setAmount( rs.getDouble("Amount"));
             financialRecord.setRecordType( rs.getString("RecordType"));
             financialRecordList.add(financialRecord);
-
-
         }
 
         return (financialRecordList);

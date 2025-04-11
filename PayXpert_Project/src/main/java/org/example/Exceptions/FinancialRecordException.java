@@ -5,7 +5,5 @@ public class FinancialRecordException extends  Exception{
         super(message);
     }
 
-    public FinancialRecordException(String message, Throwable cause) {
-        super(message, cause);
-    }
+
 }

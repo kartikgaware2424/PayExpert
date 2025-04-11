@@ -27,9 +27,7 @@ public class TaxMain {
             System.out.println(result);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error calculating tax: " + e.getMessage());
-        } catch (TaxCalculationException e) {
-            throw new RuntimeException(e);
-        } catch (DatabaseConnectionException e) {
+        } catch (TaxCalculationException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -87,7 +85,7 @@ public class TaxMain {
         boolean back = false;
 
         while (!back) {
-            System.out.println("\n===== Tax Management System =====");
+            System.out.println("Tax Management System");
             System.out.println("1. Calculate Tax");
             System.out.println("2. Get Tax By ID");
             System.out.println("3. Get Taxes for an Employee");

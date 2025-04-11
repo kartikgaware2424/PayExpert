@@ -5,7 +5,5 @@ public class TaxCalculationException extends Exception{
         super(message);
     }
 
-    public TaxCalculationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+
 }

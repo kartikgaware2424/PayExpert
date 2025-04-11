@@ -19,8 +19,6 @@ public class TaxServiceImpl implements ITaxService{
     @Override
     public String calculateTax(int employeeId, int taxYear) throws SQLException, ClassNotFoundException, TaxCalculationException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
-
-
         String cmd = "SELECT SUM(NetSalary) AS TotalIncome FROM Payroll WHERE EmployeeID = ? AND YEAR(PayPeriodStartDate) = ?";
         pst = connection.prepareStatement(cmd);
         pst.setInt(1, employeeId);
@@ -44,9 +42,9 @@ public class TaxServiceImpl implements ITaxService{
         pst = connection.prepareStatement(cmd2);
         pst.setInt(1, employeeId);
         pst.setInt(2, taxYear);
-        ResultSet checkRs = pst.executeQuery();
+        ResultSet rs1 = pst.executeQuery();
 
-        if (checkRs.next()) {
+        if (rs1.next()) {
 
             String updateQuery = "UPDATE Tax SET TaxableIncome =  ?, TaxAmount = ? WHERE EmployeeID = ? AND TaxYear = ?";
             pst = connection.prepareStatement(updateQuery);

@@ -27,24 +27,23 @@ class PayrollServiceImplTest {
         payrollService = new PayrollServiceImpl();
         taxService = new TaxServiceImpl();
 
-        // Create a test employee
+
         testEmployee = new Employee();
         testEmployee.setEmployeeID(1);
 
-        // Set test dates
+
         startDate = Date.valueOf("2024-01-01");
         endDate = Date.valueOf("2024-01-31");
     }
 
     @Test
     void testCalculateGrossSalaryForEmployee() {
-        // Test Case: CalculateGrossSalaryForEmployee
-        // Create a test payroll with known values
+
         Payroll payroll = new Payroll();
         payroll.setBasicSalary(5000.0);
         payroll.setOvertimePay(1000.0);
 
-        // Gross salary = basic salary + overtime pay
+
         double expectedGrossSalary = payroll.getBasicSalary() + payroll.getOvertimePay();
         double actualGrossSalary = payroll.getBasicSalary() + payroll.getOvertimePay();
 
@@ -54,14 +53,13 @@ class PayrollServiceImplTest {
 
     @Test
     void testCalculateNetSalaryAfterDeductions() {
-        // Test Case: CalculateNetSalaryAfterDeductions
-        // Create a test payroll with known values
+
         Payroll payroll = new Payroll();
         payroll.setBasicSalary(5000.0);
         payroll.setOvertimePay(500.0);
         payroll.setDeductions(1000.0);
 
-        // Net salary = basic salary + overtime pay - deductions
+
         double expectedNetSalary = payroll.getBasicSalary() + payroll.getOvertimePay() - payroll.getDeductions();
         payroll.setNetSalary(expectedNetSalary);
 
@@ -71,18 +69,17 @@ class PayrollServiceImplTest {
 
     @Test
     void testVerifyTaxCalculationForHighIncomeEmployee() throws SQLException, ClassNotFoundException, TaxCalculationException, DatabaseConnectionException {
-        // Test Case: VerifyTaxCalculationForHighIncomeEmployee
-        // Create a test payroll with high income
+
         Payroll payroll = new Payroll();
         payroll.setBasicSalary(10000.0);
         payroll.setOvertimePay(2000.0);
         payroll.setDeductions(1000.0);
         payroll.setNetSalary(payroll.getBasicSalary() + payroll.getOvertimePay() - payroll.getDeductions());
 
-        // Calculate tax for the year
+
         String result = taxService.calculateTax(testEmployee.getEmployeeID(), 2024);
 
-        // Verify tax calculation (10% for income > 5000)
+
         double expectedTaxRate = 0.10;
         double taxableIncome = payroll.getNetSalary();
         double expectedTaxAmount = taxableIncome * expectedTaxRate;
@@ -102,15 +99,14 @@ class PayrollServiceImplTest {
 
     @Test
     void testVerifyErrorHandlingForInvalidEmployeeData() {
-        // Test Case: VerifyErrorHandlingForInvalidEmployeeData
-        // Test with invalid employee ID
+
         int invalidEmployeeId = -1;
 
         assertThrows(PayrollGenerationException.class, () -> {
             payrollService.generatePayroll(invalidEmployeeId, startDate, endDate);
         }, "Should throw exception for invalid employee ID");
 
-        // Test with invalid dates
+
         Date invalidStartDate = Date.valueOf("2024-02-01");
         Date invalidEndDate = Date.valueOf("2024-01-31");
 

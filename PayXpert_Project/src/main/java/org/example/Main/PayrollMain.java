@@ -33,11 +33,7 @@ public class PayrollMain {
         try {
             result = payrollDao.generatePayroll(empId, startDate, endDate);
             System.out.println(result);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (PayrollGenerationException e) {
-            throw new RuntimeException(e);
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException | PayrollGenerationException e) {
             throw new RuntimeException(e);
         }
 
@@ -104,7 +100,7 @@ public class PayrollMain {
         boolean back = false;
 
         while (!back) {
-            System.out.println("\n===== Payroll Management System =====");
+            System.out.println("Payroll Management System ");
             System.out.println("1. Generate Payroll");
             System.out.println("2. Get Payroll By ID");
             System.out.println("3. Get Payrolls for an Employee");

@@ -44,9 +44,7 @@ public class FinancialRecordMain {
         try {
 
             System.out.println(  dao.GetFinancialRecordById(Record_Id));
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException | ClassNotFoundException | DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -83,7 +81,7 @@ public  static  void GetFinancialRecordsForDate()
         boolean back = false;
 
         while (!back) {
-            System.out.println("\n===== Financial Record Menu =====");
+            System.out.println("Financial Record Menu");
             System.out.println("1. Add Financial Record");
             System.out.println("2. Get Record by ID");
             System.out.println("3. Get Records for an Employee");

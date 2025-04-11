@@ -26,11 +26,7 @@ public class EmployeeMain {
         try {
             Employee EmployFound=Dao.getEmployeeById(EmployeeId);
             System.out.println(EmployFound);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (EmployeeNotFoundException | DatabaseConnectionException e) {
+        } catch (SQLException | EmployeeNotFoundException | DatabaseConnectionException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -48,7 +44,7 @@ public class EmployeeMain {
 
     public static void addEmployee() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         Employee employee=new Employee();
-        System.out.println("\nAdd New Employee");
+        System.out.println("Add New Employee");
         System.out.println("----------------");
 
         System.out.print("First Name: ");
@@ -85,7 +81,7 @@ public class EmployeeMain {
     }
     public static void updateEmployee() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         Employee employee=new Employee();
-        System.out.println("\nUpdate Employee");
+        System.out.println("Update Employee");
         System.out.println("----------------");
 
         System.out.print("Employee Id : ");
@@ -139,7 +135,7 @@ public class EmployeeMain {
             return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please use yyyy-MM-dd.");
-            return new Date(); // Return current date as fallback
+            return new Date();
         }
     }
 
@@ -149,7 +145,7 @@ public class EmployeeMain {
         boolean back = false;
 
         while (!back) {
-            System.out.println("\nEmployee Management");
+            System.out.println("Employee Management");
             System.out.println("1. Add Employee");
             System.out.println("2. View All Employees");
             System.out.println("3. View Employee by ID");

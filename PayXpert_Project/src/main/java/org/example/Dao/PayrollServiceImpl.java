@@ -21,9 +21,9 @@ public class PayrollServiceImpl implements IPayrollService {
     public String generatePayroll(int employeeId, Date startDate, Date endDate) throws SQLException, ClassNotFoundException, PayrollGenerationException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
 
-        // Fetch Payroll Record for the Given Employee
-        String fetchQuery = "SELECT PayrollID, BasicSalary, OvertimePay, Deductions FROM Payroll WHERE EmployeeID = ? AND PayPeriodStartDate = ? AND PayPeriodEndDate = ?";
-        pst = connection.prepareStatement(fetchQuery);
+
+        String cmd = "SELECT PayrollID, BasicSalary, OvertimePay, Deductions FROM Payroll WHERE EmployeeID = ? AND PayPeriodStartDate = ? AND PayPeriodEndDate = ?";
+        pst = connection.prepareStatement(cmd);
         pst.setInt(1, employeeId);
         pst.setDate(2, new java.sql.Date(startDate.getTime()));
         pst.setDate(3, new java.sql.Date(endDate.getTime()));
@@ -35,10 +35,10 @@ public class PayrollServiceImpl implements IPayrollService {
             double overtimePay = rs.getDouble("OvertimePay");
             double deductions = rs.getDouble("Deductions");
 
-            // Calculate Net Salary
+
             double netSalary = basicSalary + overtimePay - deductions;
 
-            // Update NetSalary in Existing Payroll Entry
+
             String updateQuery = "UPDATE Payroll SET NetSalary = ? WHERE PayrollID = ?";
             pst = connection.prepareStatement(updateQuery);
             pst.setDouble(1, netSalary);
@@ -59,8 +59,8 @@ public class PayrollServiceImpl implements IPayrollService {
     @Override
     public Payroll getPayrollById(int payrollId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
-        String query = "SELECT * FROM Payroll WHERE PayrollID = ?";
-        pst = connection.prepareStatement(query);
+        String cmd = "SELECT * FROM Payroll WHERE PayrollID = ?";
+        pst = connection.prepareStatement(cmd);
         pst.setInt(1, payrollId);
         ResultSet rs = pst.executeQuery();
 
@@ -82,8 +82,8 @@ public class PayrollServiceImpl implements IPayrollService {
     @Override
     public List<Payroll> getPayrollsForEmployee(int employeeId) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
-        String query = "SELECT * FROM Payroll WHERE EmployeeID = ?";
-        pst = connection.prepareStatement(query);
+        String cmd = "SELECT * FROM Payroll WHERE EmployeeID = ?";
+        pst = connection.prepareStatement(cmd);
         pst.setInt(1, employeeId);
         ResultSet rs = pst.executeQuery();
 
@@ -105,8 +105,8 @@ public class PayrollServiceImpl implements IPayrollService {
     }
     public List<Payroll> getPayrollsForPeriod(Date startDate, Date endDate) throws SQLException, ClassNotFoundException, DatabaseConnectionException {
         connection = ConnectionHelper.getConnection();
-        String query = "SELECT * FROM Payroll WHERE PayPeriodStartDate >= ? AND PayPeriodEndDate <= ?";
-        pst = connection.prepareStatement(query);
+        String cmd = "SELECT * FROM Payroll WHERE PayPeriodStartDate >= ? AND PayPeriodEndDate <= ?";
+        pst = connection.prepareStatement(cmd);
         pst.setDate(1, new java.sql.Date(startDate.getTime()));
         pst.setDate(2, new java.sql.Date(endDate.getTime()));
         ResultSet rs = pst.executeQuery();
